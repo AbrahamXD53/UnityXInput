@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a6579ab9d8c1c048bd47e82f7201b58, type: 3}
+  m_Name: ControllerConfig
+  m_EditorClassIdentifier: 
+  actionButtons:
+  - name: Ok
+    virtualButton: 0
+    buttonGamepad: 00000000
+    buttonKeyboard: 20000000
+    buttonNames:
+    - Submit
+  - name: Cancel
+    virtualButton: 0
+    buttonGamepad: 01000000
+    buttonKeyboard: 1b000000
+    buttonNames:
+    - Cancel
+  actionAxis:
+  - name: Horizontal
+    virtualButton: 0
+    axes: 00000000
+    mask: {x: 1, y: 0}
+    axisNames:
+    - Horizontal
+    touchNames:
+    - Horizontal
+  - name: Vertical
+    virtualButton: 0
+    axes: 00000000
+    mask: {x: 0, y: 1}
+    axisNames:
+    - Vertical
+    touchNames: []
+  allowVibration: 1
+  maxControllers: 4
