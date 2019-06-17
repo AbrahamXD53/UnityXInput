@@ -35,6 +35,7 @@ namespace XInput
             {
                 gamepadsState[(int)item] = new CachedGamepadState(item);
             }
+
 #endif
         }
 
@@ -56,7 +57,7 @@ namespace XInput
         public void Vibrate(PlayerIndex playerIndex, float intensity = 1.0f, float duration = 0.1f)
         {
             if (allowVibration)
-                PartyManager.Instance.Vibrate(playerIndex, intensity, duration);
+                ControllerSupport.Instance.Vibrate(playerIndex, intensity, duration);
         }
 
         public bool IsConnected(int index)

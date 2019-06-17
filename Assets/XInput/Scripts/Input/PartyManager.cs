@@ -25,7 +25,7 @@ namespace XInput
         public static PartyManager Instance;
 
         public ControllerConfig controllerConfig;
-        public List<PlayerInput> players;
+        protected List<PlayerInput> players;
         public List<PlayerInput> Players { get { return players; } }
 
         public bool readingControls = false;
@@ -93,14 +93,7 @@ namespace XInput
         {
             yield return new WaitForSeconds(1);
             readingControls = true;
-        }
-
-        protected IEnumerator VibrateCorutine(PlayerIndex index, float intensity, float duration)
-        {
-            GamePad.SetVibration(index, intensity, intensity);
-            yield return new WaitForSeconds(duration);
-            GamePad.SetVibration(index, 0, 0);
-        }
+        }        
 
         public ControllerConfig GetConfig()
         {
@@ -202,7 +195,7 @@ namespace XInput
 
             if (inputDevice == InputDevice.Gamepad)
             {
-                Vibrate(playerIndex, 0.3f, 0.3f);
+                controllerConfig.Vibrate(playerIndex, 0.3f, 0.3f);
             }
             usedCharacters[players[player].selectedCharacter] = true;
 
@@ -258,10 +251,7 @@ namespace XInput
             FixPlayerCount(inputDevice, index);
         }
 
-        public void Vibrate(PlayerIndex playerIndex, float intensity = 1.0f, float duration = 0.1f)
-        {
-            StartCoroutine(VibrateCorutine(playerIndex, intensity, duration));
-        }
+        
 
         private void AddPlayer(InputDevice inputDevice, PlayerIndex index)
         {
@@ -277,7 +267,7 @@ namespace XInput
             }
             if (inputDevice == InputDevice.Gamepad)
             {
-                Vibrate(index, 0.3f, 0.3f);
+                controllerConfig.Vibrate(index, 0.3f, 0.3f);
             }
 
             var cont = new PlayerInput();
