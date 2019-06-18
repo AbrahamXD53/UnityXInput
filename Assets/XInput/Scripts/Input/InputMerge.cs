@@ -30,10 +30,10 @@ namespace XInput
     {
         public string name;
         [Header("Gamepad")]
-        public GamepadButton[] buttonGamepad;
+        public List<GamepadButton> buttonGamepad;
         [Header("Unity Input Manager")]
-        public KeyCode[] buttonKeyboard;
+        public List<KeyCode> buttonKeyboard;
         [Header("Crossplatform Input Manager")]
-        public string[] buttonNames;
+        public List<string> buttonNames;
     }
 }

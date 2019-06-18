@@ -47,6 +47,5 @@ namespace XInput
         {
             StartCoroutine(VibrateCorutine(playerIndex, intensity, duration));
         }
-
     }
 }
