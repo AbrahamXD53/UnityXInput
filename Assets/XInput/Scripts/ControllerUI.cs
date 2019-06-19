@@ -151,75 +151,85 @@ namespace XInput
                 }
             }
 
-            scrollPositionButtons = GUI.BeginScrollView(new Rect(440, 120, 360, 150), scrollPositionButtons, new Rect(0, 0, 340, schema.actionButtons.Length * 85));
-            for (int i = 0; i < schema.actionButtons.Length; i++)
+            scrollPositionButtons = GUI.BeginScrollView(new Rect(440, 120, 360, 150), scrollPositionButtons, new Rect(0, 0, 340, schema.ActionButtons.Length * 85));
+            for (int i = 0; i < schema.ActionButtons.Length; i++)
             {
                 GUI.Box(new Rect(5, 0 + i * 85, 330, 80), "");
 
-                var text = "Input (Id: "+i+"): " + schema.actionButtons[i].name + "\nGp: [";
-                text += string.Join(", ", schema.actionButtons[i].buttonGamepad);
-                for (int j = 0; j < schema.actionButtons[i].buttonGamepad.Count; j++)
+                var text = "Input (Id: "+i+"): " + schema.ActionButtons[i].name + "\nGp: [";
+                text += string.Join(", ", schema.ActionButtons[i].buttonGamepad);
+                for (int j = 0; j < schema.ActionButtons[i].buttonGamepad.Count; j++)
                 {
                     if(GUI.Button(new Rect(120 + 50*j, 10 + i * 85, 40, 25), "G(" + j + ")"))
                     {
                         Remap(InputDevice.Gamepad, j, i);
                     }
                 }
-                if(GUI.Button(new Rect(120 + 50 * schema.actionButtons[i].buttonGamepad.Count, 10 + i * 85, 40, 25), "+"))
+                if(GUI.Button(new Rect(120 + 50 * schema.ActionButtons[i].buttonGamepad.Count, 10 + i * 85, 40, 25), "+"))
                 {
-                    Remap(InputDevice.Gamepad, schema.actionButtons[i].buttonGamepad.Count, i);
+                    Remap(InputDevice.Gamepad, schema.ActionButtons[i].buttonGamepad.Count, i);
                 }
-                if (schema.actionButtons[i].buttonGamepad.Count > 0)
+                if (schema.ActionButtons[i].buttonGamepad.Count > 0)
                 {
-                    if (GUI.Button(new Rect(120 + 50 * (schema.actionButtons[i].buttonGamepad.Count + 1), 10 + i * 85, 40, 25), "-"))
+                    if (GUI.Button(new Rect(120 + 50 * (schema.ActionButtons[i].buttonGamepad.Count + 1), 10 + i * 85, 40, 25), "-"))
                     {
                         Remap(InputDevice.Gamepad, -1, i);
                     }
                 }
 
                 text += "]\nKb: [";
-                text += string.Join(", ", schema.actionButtons[i].buttonKeyboard);
-                for (int j = 0; j < schema.actionButtons[i].buttonKeyboard.Count; j++)
+                text += string.Join(", ", schema.ActionButtons[i].buttonKeyboard);
+                for (int j = 0; j < schema.ActionButtons[i].buttonKeyboard.Count; j++)
                 {
                     if (GUI.Button(new Rect(120 + 50 * j, 40 + i * 85, 40, 25), "K(" + j + ")"))
                     {
                         Remap(InputDevice.KeyboardMouse, j, i);
                     }
                 }
-                if (GUI.Button(new Rect(120 + 50 * schema.actionButtons[i].buttonKeyboard.Count, 40 + i * 85, 40, 25), "+"))
+                if (GUI.Button(new Rect(120 + 50 * schema.ActionButtons[i].buttonKeyboard.Count, 40 + i * 85, 40, 25), "+"))
                 {
-                    Remap(InputDevice.KeyboardMouse, schema.actionButtons[i].buttonKeyboard.Count, i);
+                    Remap(InputDevice.KeyboardMouse, schema.ActionButtons[i].buttonKeyboard.Count, i);
                 }
-                if (schema.actionButtons[i].buttonKeyboard.Count > 0)
+                if (schema.ActionButtons[i].buttonKeyboard.Count > 0)
                 {
-                    if (GUI.Button(new Rect(120 + 50 * (schema.actionButtons[i].buttonKeyboard.Count + 1), 40 + i * 85, 40, 25), "-"))
+                    if (GUI.Button(new Rect(120 + 50 * (schema.ActionButtons[i].buttonKeyboard.Count + 1), 40 + i * 85, 40, 25), "-"))
                     {
                         Remap(InputDevice.KeyboardMouse, -1, i);
                     }
                 }
                 text += "]\nCI: [";
-                text += string.Join(", ", schema.actionButtons[i].buttonNames);
+                text += string.Join(", ", schema.ActionButtons[i].buttonNames);
                 text += "]";
 
                 GUI.Label(new Rect(15, 0 + i * 85, 330, 80), text);
             }
             GUI.EndScrollView();
 
-            scrollPositionAxis = GUI.BeginScrollView(new Rect(440, 300, 360, 150), scrollPositionAxis, new Rect(0, 0, 340, schema.actionButtons.Length * 85));
-            for (int i = 0; i < schema.actionAxis.Length; i++)
+            scrollPositionAxis = GUI.BeginScrollView(new Rect(440, 300, 360, 150), scrollPositionAxis, new Rect(0, 0, 340, schema.ActionAxis.Length * 85));
+            for (int i = 0; i < schema.ActionAxis.Length; i++)
             {
-                var text = "Input (Id: " + i + "): " + schema.actionAxis[i].name + "\nGp: [";
-                text += string.Join(", ", schema.actionAxis[i].axes);
+                var text = "Input (Id: " + i + "): " + schema.ActionAxis[i].name + "\nGp: [";
+                text += string.Join(", ", schema.ActionAxis[i].axes);
                 text += "]\nKb: [";
-                text += string.Join(", ", schema.actionAxis[i].axisNames);
+                text += string.Join(", ", schema.ActionAxis[i].axisNames);
                 text += "]\nCI: [";
-                text += string.Join(", ", schema.actionAxis[i].touchNames);
+                text += string.Join(", ", schema.ActionAxis[i].touchNames);
                 text += "]";
 
                 GUI.Box(new Rect(5, 0 + i * 85, 330, 80), "");
                 GUI.Label(new Rect(15, 0 + i * 85, 330, 80), text);
             }
             GUI.EndScrollView();
+
+            if(GUI.Button(new Rect(500, 475, 120, 25), "Defaults"))
+            {
+                controller.RevertChanges();
+            }
+
+            if (GUI.Button(new Rect(630, 475, 120, 25), "Save"))
+            {
+                controller.SaveChanges();
+            }
         }
     }
 }

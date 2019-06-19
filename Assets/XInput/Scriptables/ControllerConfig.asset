@@ -16,5 +16,5 @@ MonoBehaviour:
   maxControllers: 4
   schemas:
   - {fileID: 11400000, guid: a5851bce863763140a6a9d8b2ec61f2b, type: 2}
-  - {fileID: 11400000, guid: 8b8cc64d0f7f08346a6900679880c93f, type: 2}
+  - {fileID: 11400000, guid: c86b5881664ff4b4dbbf4385611fbf2b, type: 2}
   loadedSchema: 0

@@ -174,7 +174,9 @@ namespace XInput
 
         public void Init()
         {
-            currentSchema = schemas[loadedSchema];
+            LoadSchema(loadedSchema);
+
+            Debug.Log(JsonUtility.ToJson(currentSchema));
 #if USE_GENERICINPUT
             genericGamepads = new GenericGamepad[maxControllers];
             for (int i = 0; i < maxControllers; i++)
@@ -194,6 +196,7 @@ namespace XInput
         {
             loadedSchema = id;
             currentSchema = schemas[loadedSchema];
+            currentSchema.Load(id);
         }
 
         public void Update()
@@ -260,21 +263,21 @@ namespace XInput
         {
             float res = 0;
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.KeyboardMouse))
-                for (int i = 0; i < currentSchema.actionAxis[actionIndex].axisNames.Length; i++)
-                    res += Input.GetAxis(currentSchema.actionAxis[actionIndex].axisNames[i]);
+                for (int i = 0; i < currentSchema.ActionAxis[actionIndex].axisNames.Length; i++)
+                    res += Input.GetAxis(currentSchema.ActionAxis[actionIndex].axisNames[i]);
 #if USE_GENERICINPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
                 for (int i = 0; i < currentSchema.actionAxis[actionIndex].axes.Length; i++)
                     res += genericGamepads[playerIndex].GetAxis(currentSchema.actionAxis[actionIndex].axes[i]);
 #else
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
-                for (int i = 0; i < currentSchema.actionAxis[actionIndex].axes.Length; i++)
-                    res += gamepadsState[playerIndex].GetAxis(currentSchema.actionAxis[actionIndex].axes[i]);
+                for (int i = 0; i < currentSchema.ActionAxis[actionIndex].axes.Length; i++)
+                    res += gamepadsState[playerIndex].GetAxis(currentSchema.ActionAxis[actionIndex].axes[i]);
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
-                for (int i = 0; i < currentSchema.actionAxis[actionIndex].touchNames.Length; i++)
-                    res += CrossPlatformInputManager.GetAxis(currentSchema.actionAxis[actionIndex].touchNames[i]);
+                for (int i = 0; i < currentSchema.ActionAxis[actionIndex].touchNames.Length; i++)
+                    res += CrossPlatformInputManager.GetAxis(currentSchema.ActionAxis[actionIndex].touchNames[i]);
 #endif
             return res;
         }
@@ -282,8 +285,8 @@ namespace XInput
         public bool ButtonDown(int actionIndex, InputDevice inputDevice, int playerIndex)
         {
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.KeyboardMouse))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonKeyboard.Count; i++)
-                    if (Input.GetKeyDown(currentSchema.actionButtons[actionIndex].buttonKeyboard[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonKeyboard.Count; i++)
+                    if (Input.GetKeyDown(currentSchema.ActionButtons[actionIndex].buttonKeyboard[i]))
                         return true;
 #if USE_GENERICINPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
@@ -292,14 +295,14 @@ namespace XInput
                         return true;
 #else
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonGamepad.Count; i++)
-                    if (gamepadsState[playerIndex].ButtonDown(currentSchema.actionButtons[actionIndex].buttonGamepad[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
+                    if (gamepadsState[playerIndex].ButtonDown(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
                         return true;
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonNames.Count; i++)
-                    if (CrossPlatformInputManager.GetButtonDown(currentSchema.actionButtons[actionIndex].buttonNames[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonNames.Count; i++)
+                    if (CrossPlatformInputManager.GetButtonDown(currentSchema.ActionButtons[actionIndex].buttonNames[i]))
                         return true;
 #endif
             return false;
@@ -309,8 +312,8 @@ namespace XInput
         public bool Button(int actionIndex, InputDevice inputDevice, int playerIndex)
         {
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.KeyboardMouse))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonKeyboard.Count; i++)
-                    if (Input.GetKey(currentSchema.actionButtons[actionIndex].buttonKeyboard[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonKeyboard.Count; i++)
+                    if (Input.GetKey(currentSchema.ActionButtons[actionIndex].buttonKeyboard[i]))
                         return true;
 #if USE_GENERICINPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
@@ -319,14 +322,14 @@ namespace XInput
                         return true;
 #else
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonGamepad.Count; i++)
-                    if (gamepadsState[playerIndex].Button(currentSchema.actionButtons[actionIndex].buttonGamepad[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
+                    if (gamepadsState[playerIndex].Button(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
                         return true;
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonNames.Count; i++)
-                    if (CrossPlatformInputManager.GetButtonDown(currentSchema.actionButtons[actionIndex].buttonNames[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonNames.Count; i++)
+                    if (CrossPlatformInputManager.GetButtonDown(currentSchema.ActionButtons[actionIndex].buttonNames[i]))
                         return true;
 #endif
             return false;
@@ -336,8 +339,8 @@ namespace XInput
         public bool ButtonUp(int actionIndex, InputDevice inputDevice, int playerIndex)
         {
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.KeyboardMouse))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonKeyboard.Count; i++)
-                    if (Input.GetKeyUp(currentSchema.actionButtons[actionIndex].buttonKeyboard[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonKeyboard.Count; i++)
+                    if (Input.GetKeyUp(currentSchema.ActionButtons[actionIndex].buttonKeyboard[i]))
                         return true;
 #if USE_GENERICINPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
@@ -346,40 +349,50 @@ namespace XInput
                         return true;
 #else
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonGamepad.Count; i++)
-                    if (gamepadsState[playerIndex].ButtonUp(currentSchema.actionButtons[actionIndex].buttonGamepad[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
+                    if (gamepadsState[playerIndex].ButtonUp(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
                         return true;
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonNames.Count; i++)
-                    if (CrossPlatformInputManager.GetButtonDown(currentSchema.actionButtons[actionIndex].buttonNames[i]))
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonNames.Count; i++)
+                    if (CrossPlatformInputManager.GetButtonDown(currentSchema.ActionButtons[actionIndex].buttonNames[i]))
                         return true;
 #endif
             return false;
 
         }
 
+        public void RevertChanges()
+        {
+            currentSchema.Revert();
+        }
+
+        public void SaveChanges()
+        {
+            currentSchema.Save();
+        }
+
         public void Remap(int action, string button, int index)
         {
-            if (index >= currentSchema.actionButtons[action].buttonNames.Count)
-                currentSchema.actionButtons[action].buttonNames.Add(button);
+            if (index >= currentSchema.ActionButtons[action].buttonNames.Count)
+                currentSchema.ActionButtons[action].buttonNames.Add(button);
             else
-                currentSchema.actionButtons[action].buttonNames[index] = button;
+                currentSchema.ActionButtons[action].buttonNames[index] = button;
         }
 
         public void Remap(int action, KeyCode key, int index)
         {
             if (index < 0)
             {
-                currentSchema.actionButtons[action].buttonKeyboard.RemoveAt(currentSchema.actionButtons[action].buttonKeyboard.Count - 1);
+                currentSchema.ActionButtons[action].buttonKeyboard.RemoveAt(currentSchema.ActionButtons[action].buttonKeyboard.Count - 1);
             }
             else
             {
-                if (index >= currentSchema.actionButtons[action].buttonKeyboard.Count)
-                    currentSchema.actionButtons[action].buttonKeyboard.Add(key);
+                if (index >= currentSchema.ActionButtons[action].buttonKeyboard.Count)
+                    currentSchema.ActionButtons[action].buttonKeyboard.Add(key);
                 else
-                    currentSchema.actionButtons[action].buttonKeyboard[index] = key;
+                    currentSchema.ActionButtons[action].buttonKeyboard[index] = key;
             }
         }
 
@@ -387,14 +400,14 @@ namespace XInput
         {
             if (index < 0)
             {
-                currentSchema.actionButtons[action].buttonGamepad.RemoveAt(currentSchema.actionButtons[action].buttonGamepad.Count - 1);
+                currentSchema.ActionButtons[action].buttonGamepad.RemoveAt(currentSchema.ActionButtons[action].buttonGamepad.Count - 1);
             }
             else
             {
-                if (index >= currentSchema.actionButtons[action].buttonGamepad.Count)
-                    currentSchema.actionButtons[action].buttonGamepad.Add(button);
+                if (index >= currentSchema.ActionButtons[action].buttonGamepad.Count)
+                    currentSchema.ActionButtons[action].buttonGamepad.Add(button);
                 else
-                    currentSchema.actionButtons[action].buttonGamepad[index] = button;
+                    currentSchema.ActionButtons[action].buttonGamepad[index] = button;
             }
         }
     }

@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eea1bfcfae082eb4c93b39b9bf074330, type: 3}
-  m_Name: ControllerSchema
+  m_Name: Alternative
   m_EditorClassIdentifier: 
-  name: Default
+  name: Alternative
   schema:
     actionButtons:
     - name: Ok
-      buttonGamepad: 00000000
+      buttonGamepad: 03000000
       buttonKeyboard: 20000000
       buttonNames:
       - Submit
@@ -27,13 +27,12 @@ MonoBehaviour:
       - Cancel
     actionAxis:
     - name: Horizontal
-      axes: 00000000
-      axisNames:
-      - Horizontal
+      axes: 0000000006000000
+      axisNames: []
       touchNames:
       - Horizontal
     - name: Vertical
-      axes: 01000000
+      axes: 0100000007000000
       axisNames:
       - Vertical
       touchNames:

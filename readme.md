@@ -16,6 +16,7 @@ You can read input from:
   - Input Configutation files ***default:** XInput -> Scriptables -> ControllerConfig*
     - It should work as a customizable controll schema
     - Change controller config at runtime
+    - Live remaping
 
 
 ### Input Merge
@@ -29,7 +30,6 @@ You can read input from:
 
 ### To Do:
 
-- Remaping (Working in this, need to save remaped controls)
 - Easier customization
   
 
