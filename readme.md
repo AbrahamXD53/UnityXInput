@@ -1,6 +1,6 @@
 # Unity Multiple Input
 
-This is an example of using an Input manager, it uses [XInputDotNet](https://github.com/speps/XInputDotNet) and Unity Standar Assets (CrossplatformInput).
+This is an example of using a custom Input manager, it uses [XInputDotNet](https://github.com/speps/XInputDotNet) and Unity Standar Assets (CrossplatformInput).
 You can read input from:
   - Mouse and Keyboard
   - Gamepad
@@ -14,7 +14,9 @@ You can read input from:
   - Input Merge (Redefined Input manager)
   - Controller vibration (XInputDotNet)
   - Input Configutation files ***default:** XInput -> Scriptables -> ControllerConfig*
-    - It should work as a customizable controll schema 
+    - It should work as a customizable controll schema
+    - Change controller config at runtime
+    - Live remaping
 
 
 ### Input Merge
@@ -28,8 +30,6 @@ You can read input from:
 
 ### To Do:
 
-- Remaping
-- Change controller config at runtime
 - Easier customization
   
 

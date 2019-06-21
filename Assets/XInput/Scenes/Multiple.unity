@@ -515,7 +515,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controllerConfig: {fileID: 11400000, guid: d7bf14d06a071f44286be995fe43b8dc, type: 2}
-  players: []
   readingControls: 0
   maxCharacters: 4
   maxPlayers: 4
@@ -524,6 +523,7 @@ MonoBehaviour:
   cancelButton: 1
   joinButton: 0
   horizontalAxis: 0
+  remaping: 0
 --- !u!4 &667439633
 Transform:
   m_ObjectHideFlags: 0
@@ -550,6 +550,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0774d78f482b90f4aa5f82787b71bf5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  remaping: 0
+  controlIndex: 0
+  actionIndex: 0
+  waitTime: 10
   playerPrefab: {fileID: 3762058664038184769, guid: e26e1a781d6f3564ab74aecf2d564772,
     type: 3}
 --- !u!1 &682863041

@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Linq;
 
 namespace XInput
 {
     [System.Serializable]
-    public class GenericGamepad
+    public class GenericGamepad : IGamepad
     {
         public GenericGamePadInput.Index index;
 
@@ -37,6 +38,16 @@ namespace XInput
         public float GetAxis(GamepadAxis gamepadAxis)
         {
             return Input.GetAxis(axis[(int)gamepadAxis]);
+        }
+
+        public GamepadButton GetButtonPressed()
+        {
+            foreach (var item in Enum.GetValues(typeof(GamepadButton)).Cast<GamepadButton>())
+            {
+                if (ButtonDown(item))
+                    return item;
+            }
+            return GamepadButton.None;
         }
     }
 
@@ -155,7 +166,8 @@ namespace XInput
                             KeyCode.Joystick1Button11,
                             KeyCode.Joystick1Button12,
                             KeyCode.Joystick1Button13,
-                            KeyCode.Joystick1Button14
+                            KeyCode.Joystick1Button14,
+                            KeyCode.Joystick1Button15
                         };
                 case 1:
                     return new KeyCode[] {
@@ -173,7 +185,8 @@ namespace XInput
                             KeyCode.Joystick2Button11,
                             KeyCode.Joystick2Button12,
                             KeyCode.Joystick2Button13,
-                            KeyCode.Joystick2Button14
+                            KeyCode.Joystick2Button14,
+                            KeyCode.Joystick2Button15
                         };
                 case 2:
                     return new KeyCode[] {
@@ -191,7 +204,8 @@ namespace XInput
                             KeyCode.Joystick3Button11,
                             KeyCode.Joystick3Button12,
                             KeyCode.Joystick3Button13,
-                            KeyCode.Joystick3Button14
+                            KeyCode.Joystick3Button14,
+                            KeyCode.Joystick3Button15
                         };
                 case 3:
                     return new KeyCode[] {
@@ -209,7 +223,8 @@ namespace XInput
                             KeyCode.Joystick4Button11,
                             KeyCode.Joystick4Button12,
                             KeyCode.Joystick4Button13,
-                            KeyCode.Joystick4Button14
+                            KeyCode.Joystick4Button14,
+                            KeyCode.Joystick4Button15
                         };
                 default:
                     return new KeyCode[] {
@@ -227,7 +242,8 @@ namespace XInput
                             KeyCode.JoystickButton11,
                             KeyCode.JoystickButton12,
                             KeyCode.JoystickButton13,
-                            KeyCode.JoystickButton14
+                            KeyCode.JoystickButton14,
+                            KeyCode.JoystickButton15
                         };
             }
         }

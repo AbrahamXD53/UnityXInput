@@ -43,6 +43,9 @@ namespace XInput
         protected int currentControllerIndex = 0;
         protected bool allPlayersReady = false;
 
+        public bool remaping;
+        protected InputDevice remapingDevice;
+
         #endregion
 
         #region UNITY_EVENTS
@@ -72,6 +75,33 @@ namespace XInput
             {
                 controllerConfig.Update();
             }
+
+
+            if (remaping)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (controllerConfig.IsConnected(i))
+                    {
+                        var input = controllerConfig.GetGamepad(i).GetButtonPressed();
+                        if (input != GamepadButton.None)
+                        {
+                            Debug.Log("Pressed Button " + input + ", on controller " + i);
+                            controllerConfig.Remap(0, input, 0);
+                            remaping = false;
+                            Debug.Log("Done!");
+                        }
+                    }
+                }
+                Debug.Log("Mapping");
+            }
+            else
+            {
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    remaping = true;
+                }
+            }
         }
 
         private void LateUpdate()
@@ -93,7 +123,7 @@ namespace XInput
         {
             yield return new WaitForSeconds(1);
             readingControls = true;
-        }        
+        }
 
         public ControllerConfig GetConfig()
         {
@@ -251,7 +281,7 @@ namespace XInput
             FixPlayerCount(inputDevice, index);
         }
 
-        
+
 
         private void AddPlayer(InputDevice inputDevice, PlayerIndex index)
         {

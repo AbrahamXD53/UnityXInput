@@ -32,4 +32,16 @@ namespace XInput
     public enum GamepadTriggers { Left, Right }
     public enum GamepadThumbSticks { Left, Right }
 
+
+    public interface IGamepad
+    {
+        bool ButtonDown(GamepadButton padButton);
+
+        bool Button(GamepadButton padButton);
+
+        bool ButtonUp(GamepadButton padButton);
+
+        float GetAxis(GamepadAxis gamepadAxis);
+    }
+
 }

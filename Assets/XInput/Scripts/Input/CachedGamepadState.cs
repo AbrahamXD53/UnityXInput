@@ -7,7 +7,7 @@ using XInputDotNetPure;
 
 namespace XInput
 {
-    public class CachedGamepadState
+    public class CachedGamepadState : IGamepad
     {
         protected PlayerIndex playerIndex;
         protected GamePadState prevState;
@@ -19,19 +19,6 @@ namespace XInput
         public GamePadDPad DPad { get { return actualState.DPad; } }
         public GamePadTriggers Triggers { get { return actualState.Triggers; } }
         public GamePadThumbSticks ThumbSticks { get { return actualState.ThumbSticks; } }
-
-        public GamePadThumbSticks.StickValue GetThumbSticks(GamepadThumbSticks gamepadAxis)
-        {
-            switch (gamepadAxis)
-            {
-                case GamepadThumbSticks.Left:
-                    return actualState.ThumbSticks.Left;
-                case GamepadThumbSticks.Right:
-                    return actualState.ThumbSticks.Right;
-                default:
-                    return new GamePadThumbSticks.StickValue();
-            }
-        }
 
         public float GetAxis(GamepadAxis gamepadAxis)
         {
@@ -49,9 +36,9 @@ namespace XInput
                     return actualState.Triggers.Left;
                 case GamepadAxis.RightTrigger:
                     return actualState.Triggers.Right;
-                case GamepadAxis.DpadX:
-                    return (actualState.DPad.Up == ButtonState.Pressed ? 1 : 0) + (actualState.DPad.Down == ButtonState.Pressed ? -1 : 0);
                 case GamepadAxis.DpadY:
+                    return (actualState.DPad.Up == ButtonState.Pressed ? 1 : 0) + (actualState.DPad.Down == ButtonState.Pressed ? -1 : 0);
+                case GamepadAxis.DpadX:
                     return (actualState.DPad.Right == ButtonState.Pressed ? 1 : 0) + (actualState.DPad.Left == ButtonState.Pressed ? -1 : 0);
                 default:
                     break;
@@ -95,19 +82,6 @@ namespace XInput
                     return prevState.Buttons.Guide == ButtonState.Released && actualState.Buttons.Guide == ButtonState.Pressed;
                 default:
                     return false;
-            }
-        }
-
-        internal float GetThumbValue(GamepadThumbSticks gamepadThumbSticks, Vector2 mask)
-        {
-            switch (gamepadThumbSticks)
-            {
-                case GamepadThumbSticks.Left:
-                    return actualState.ThumbSticks.Left.X * mask.x + actualState.ThumbSticks.Left.Y * mask.y;
-                case GamepadThumbSticks.Right:
-                    return actualState.ThumbSticks.Right.X * mask.x + actualState.ThumbSticks.Right.Y * mask.y;
-                default:
-                    return 0;
             }
         }
 
