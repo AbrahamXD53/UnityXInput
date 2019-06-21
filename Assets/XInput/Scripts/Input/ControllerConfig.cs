@@ -174,6 +174,9 @@ namespace XInput
 
         public void Init()
         {
+            allowVibration = PlayerPrefs.GetInt("Vibration",1) == 1;
+            loadedSchema = PlayerPrefs.GetInt("Schema", loadedSchema);
+
             LoadSchema(loadedSchema);
 
             Debug.Log(JsonUtility.ToJson(currentSchema));
@@ -365,20 +368,29 @@ namespace XInput
 
         public void RevertChanges()
         {
+            allowVibration = true;
+            LoadSchema(0);
             currentSchema.Revert();
         }
 
         public void SaveChanges()
         {
+            PlayerPrefs.SetInt("Vibration", allowVibration ? 1 : 0);
+            PlayerPrefs.SetInt("Schema", loadedSchema);
             currentSchema.Save();
         }
 
         public void Remap(int action, string button, int index)
         {
             if (index >= currentSchema.ActionButtons[action].buttonNames.Count)
-                currentSchema.ActionButtons[action].buttonNames.Add(button);
+            {
+                if(!currentSchema.ActionButtons[action].buttonNames.Contains(button))
+                    currentSchema.ActionButtons[action].buttonNames.Add(button);
+            }
             else
+            {
                 currentSchema.ActionButtons[action].buttonNames[index] = button;
+            }
         }
 
         public void Remap(int action, KeyCode key, int index)
@@ -390,9 +402,14 @@ namespace XInput
             else
             {
                 if (index >= currentSchema.ActionButtons[action].buttonKeyboard.Count)
-                    currentSchema.ActionButtons[action].buttonKeyboard.Add(key);
+                {
+                    if (!currentSchema.ActionButtons[action].buttonKeyboard.Contains(key))
+                        currentSchema.ActionButtons[action].buttonKeyboard.Add(key);
+                }
                 else
+                {
                     currentSchema.ActionButtons[action].buttonKeyboard[index] = key;
+                }
             }
         }
 
@@ -405,9 +422,14 @@ namespace XInput
             else
             {
                 if (index >= currentSchema.ActionButtons[action].buttonGamepad.Count)
-                    currentSchema.ActionButtons[action].buttonGamepad.Add(button);
+                {
+                    if (!currentSchema.ActionButtons[action].buttonGamepad.Contains(button))
+                        currentSchema.ActionButtons[action].buttonGamepad.Add(button);
+                }
                 else
+                {
                     currentSchema.ActionButtons[action].buttonGamepad[index] = button;
+                }
             }
         }
     }
