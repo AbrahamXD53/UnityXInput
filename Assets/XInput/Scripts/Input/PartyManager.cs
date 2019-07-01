@@ -131,7 +131,7 @@ namespace XInput
         }
 
         /*Check if controller has joinned*/
-        public bool IsControllIn(InputDevice inputDevice, PlayerIndex k)
+        public bool IsControllIn(InputDevice inputDevice, GamepadIndex k)
         {
             if (players == null || players.Count == 0)
                 return false;
@@ -145,7 +145,7 @@ namespace XInput
             return false;
         }
 
-        protected void ChangeCharacter(InputDevice inputDevice, PlayerIndex playerIndex, Vector2 direction)
+        protected void ChangeCharacter(InputDevice inputDevice, GamepadIndex playerIndex, Vector2 direction)
         {
             for (int i = 0; i < players.Count; i++)
             {
@@ -218,7 +218,7 @@ namespace XInput
             readingControls = false;
         }
 
-        protected void SetPlayerReady(InputDevice inputDevice, int player, PlayerIndex playerIndex)
+        protected void SetPlayerReady(InputDevice inputDevice, int player, GamepadIndex playerIndex)
         {
             if (PlayerReady != null)
                 PlayerReady(player);
@@ -240,10 +240,10 @@ namespace XInput
             players[player].ready = true;
         }
 
-        protected void FixPlayerCount(InputDevice inputDevice, PlayerIndex index)
+        protected void FixPlayerCount(InputDevice inputDevice, GamepadIndex index)
         {
             PlayerInput cont;
-            if (inputDevice != InputDevice.Gamepad && inputDevice != InputDevice.GenericGamepad)
+            if (inputDevice != InputDevice.Gamepad)
             {
                 cont = (from p in players where p.IsInput(inputDevice) select p).First();
             }
@@ -261,7 +261,7 @@ namespace XInput
                 PlayerRemoved(cont.realIndex);
         }
 
-        protected void RemovePlayer(InputDevice inputDevice, PlayerIndex index)
+        protected void RemovePlayer(InputDevice inputDevice, GamepadIndex index)
         {
             for (int i = 0; i < players.Count; i++)
             {
@@ -283,7 +283,7 @@ namespace XInput
 
 
 
-        private void AddPlayer(InputDevice inputDevice, PlayerIndex index)
+        private void AddPlayer(InputDevice inputDevice, GamepadIndex index)
         {
             if (players == null)
                 players = new List<PlayerInput>();
@@ -291,7 +291,7 @@ namespace XInput
             if (players.Count >= maxPlayers)
                 return;
 
-            if (inputDevice == InputDevice.Gamepad || inputDevice == InputDevice.GenericGamepad)
+            if (inputDevice == InputDevice.Gamepad)
             {
                 currentControllerIndex++;
             }
@@ -315,7 +315,7 @@ namespace XInput
                 PlayerCharacterChanged(cont.realIndex);
         }
 
-        protected void CheckByDevice(InputDevice inputDevice, PlayerIndex playerIndex = PlayerIndex.One)
+        protected void CheckByDevice(InputDevice inputDevice, GamepadIndex playerIndex = GamepadIndex.One)
         {
             var axisVal = controllerConfig.GetAxis(horizontalAxis, inputDevice, (int)playerIndex);
             if (axisVal > 0)
@@ -362,14 +362,14 @@ namespace XInput
 #if USE_GENERICINPUT
             for (int i = 0; i < Input.GetJoystickNames().Length; i++)
             {
-                CheckByDevice(InputDevice.GenericGamepad, (PlayerIndex)i);
+                CheckByDevice(InputDevice.Gamepad, (PlayerIndex)i);
             }
 #else
             for (int i = 0; i < controllerConfig.maxControllers; i++)
             {
                 if (controllerConfig.IsConnected(i))
                 {
-                    CheckByDevice(InputDevice.Gamepad, (PlayerIndex)i);
+                    CheckByDevice(InputDevice.Gamepad, (GamepadIndex)i);
                 }
             }
 #endif

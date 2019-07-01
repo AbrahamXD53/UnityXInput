@@ -8,14 +8,14 @@ namespace XInput
     [System.Serializable]
     public class GenericGamepad : IGamepad
     {
-        public GenericGamePadInput.Index index;
+        public GamepadIndex index;
 
         public KeyCode[] buttonKeyCodes;
         public string[] axis;
 
         public GenericGamepad(int index, KeyCode[] buttons, string[] axisNames)
         {
-            this.index = (GenericGamePadInput.Index)index;
+            this.index = (GamepadIndex)index;
             buttonKeyCodes = buttons;
             axis = axisNames;
         }
@@ -53,7 +53,6 @@ namespace XInput
 
     public static class GenericGamePadInput
     {
-        public enum Index { One, Two, Three, Four, Any }
 
         private static readonly string[][] TriggerNames = new string[][]
         {

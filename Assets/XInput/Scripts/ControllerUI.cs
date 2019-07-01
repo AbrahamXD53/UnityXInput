@@ -72,7 +72,7 @@ namespace XInput
         {
             if (remaping)
             {
-                if (remapingDevice == InputDevice.Gamepad || remapingDevice == InputDevice.GenericGamepad)
+                if (remapingDevice == InputDevice.Gamepad)
                 {
                     for (int i = 0; i < 4; i++)
                     {

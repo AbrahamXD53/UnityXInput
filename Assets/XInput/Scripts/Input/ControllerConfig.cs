@@ -19,7 +19,9 @@ namespace XInput
 
         protected ControllerSchema currentSchema;
 
+        [SerializeField]
         protected CachedGamepadState[] gamepadsState;
+        [SerializeField]
         protected GenericGamepad[] genericGamepads;
 
 
@@ -174,7 +176,7 @@ namespace XInput
 
         public void Init()
         {
-            allowVibration = PlayerPrefs.GetInt("Vibration",1) == 1;
+            allowVibration = PlayerPrefs.GetInt("Vibration", 1) == 1;
             loadedSchema = PlayerPrefs.GetInt("Schema", loadedSchema);
 
             LoadSchema(loadedSchema);
@@ -182,7 +184,7 @@ namespace XInput
             Debug.Log(JsonUtility.ToJson(currentSchema));
 #if USE_GENERICINPUT
             genericGamepads = new GenericGamepad[maxControllers];
-            for (int i = 0; i < maxControllers; i++)
+            for (int i = 0; i < maxControllers+1; i++)
             {
                 genericGamepads[i] = GenericGamePadInput.GetGamepad(i);
             }
@@ -247,10 +249,22 @@ namespace XInput
                 return schemas[index];
         }
 
-        public void Vibrate(PlayerIndex playerIndex, float intensity = 1.0f, float duration = 0.1f)
+        public void Vibrate(GamepadIndex playerIndex, float intensity = 1.0f, float duration = 0.1f)
         {
             if (allowVibration)
-                ControllerSupport.Instance.Vibrate(playerIndex, intensity, duration);
+            {
+                if (playerIndex == GamepadIndex.Any)
+                {
+                    for (int i = 0; i < maxControllers; i++)
+                    {
+                        ControllerSupport.Instance.Vibrate((GamepadIndex)i, intensity, duration);
+                    }
+                }
+                else
+                {
+                    ControllerSupport.Instance.Vibrate(playerIndex, intensity, duration);
+                }
+            }
         }
 
         public bool IsConnected(int index)
@@ -262,21 +276,22 @@ namespace XInput
 #endif
         }
 
-        public float GetAxis(int actionIndex, InputDevice inputDevice, int playerIndex)
+        public float GetAxis(int actionIndex, InputDevice inputDevice, int playerIndex = 4)
         {
             float res = 0;
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.KeyboardMouse))
                 for (int i = 0; i < currentSchema.ActionAxis[actionIndex].axisNames.Length; i++)
                     res += Input.GetAxis(currentSchema.ActionAxis[actionIndex].axisNames[i]);
-#if USE_GENERICINPUT
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
-                for (int i = 0; i < currentSchema.actionAxis[actionIndex].axes.Length; i++)
-                    res += genericGamepads[playerIndex].GetAxis(currentSchema.actionAxis[actionIndex].axes[i]);
-#else
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
+#if USE_GENERICINPUT
                 for (int i = 0; i < currentSchema.ActionAxis[actionIndex].axes.Length; i++)
-                    res += gamepadsState[playerIndex].GetAxis(currentSchema.ActionAxis[actionIndex].axes[i]);
+                    res += genericGamepads[playerIndex].GetAxis(currentSchema.ActionAxis[actionIndex].axes[i]);
+#else
+                for (int i = 0; i < currentSchema.ActionAxis[actionIndex].axes.Length; i++)
+                    for (int p = playerIndex == 4 ? 0 : playerIndex; p < (playerIndex == 4 ? maxControllers : playerIndex + 1); p++)
+                        res += gamepadsState[p].GetAxis(currentSchema.ActionAxis[actionIndex].axes[i]);
 #endif
+
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
                 for (int i = 0; i < currentSchema.ActionAxis[actionIndex].touchNames.Length; i++)
@@ -291,16 +306,16 @@ namespace XInput
                 for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonKeyboard.Count; i++)
                     if (Input.GetKeyDown(currentSchema.ActionButtons[actionIndex].buttonKeyboard[i]))
                         return true;
+            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
 #if USE_GENERICINPUT
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonGamepad.Count; i++)
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
                     if (genericGamepads[playerIndex].ButtonDown(currentSchema.actionButtons[actionIndex].buttonGamepad[i]))
                         return true;
 #else
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
                 for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
-                    if (gamepadsState[playerIndex].ButtonDown(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
-                        return true;
+                    for (int p = playerIndex == 4 ? 0 : playerIndex; p < (playerIndex == 4 ? maxControllers : playerIndex + 1); p++)
+                        if (gamepadsState[p].ButtonDown(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
+                            return true;
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
@@ -318,16 +333,16 @@ namespace XInput
                 for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonKeyboard.Count; i++)
                     if (Input.GetKey(currentSchema.ActionButtons[actionIndex].buttonKeyboard[i]))
                         return true;
+            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
 #if USE_GENERICINPUT
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonGamepad.Count; i++)
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
                     if (genericGamepads[playerIndex].Button(currentSchema.actionButtons[actionIndex].buttonGamepad[i]))
                         return true;
 #else
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
                 for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
-                    if (gamepadsState[playerIndex].Button(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
-                        return true;
+                    for (int p = playerIndex == 4 ? 0 : playerIndex; p < (playerIndex == 4 ? maxControllers : playerIndex + 1); p++)
+                        if (gamepadsState[p].Button(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
+                            return true;
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
@@ -345,16 +360,16 @@ namespace XInput
                 for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonKeyboard.Count; i++)
                     if (Input.GetKeyUp(currentSchema.ActionButtons[actionIndex].buttonKeyboard[i]))
                         return true;
+            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
 #if USE_GENERICINPUT
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.GenericGamepad))
-                for (int i = 0; i < currentSchema.actionButtons[actionIndex].buttonGamepad.Count; i++)
+                for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
                     if (genericGamepads[playerIndex].ButtonUp(currentSchema.actionButtons[actionIndex].buttonGamepad[i]))
                         return true;
 #else
-            if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Gamepad))
                 for (int i = 0; i < currentSchema.ActionButtons[actionIndex].buttonGamepad.Count; i++)
-                    if (gamepadsState[playerIndex].ButtonUp(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
-                        return true;
+                    for (int p = playerIndex == 4 ? 0 : playerIndex; p < (playerIndex == 4 ? maxControllers : playerIndex + 1); p++)
+                        if (gamepadsState[p].ButtonUp(currentSchema.ActionButtons[actionIndex].buttonGamepad[i]))
+                            return true;
 #endif
 #if MOBILE_INPUT
             if (inputDevice == InputDevice.Any || inputDevice.HasFlag(InputDevice.Touch))
@@ -384,7 +399,7 @@ namespace XInput
         {
             if (index >= currentSchema.ActionButtons[action].buttonNames.Count)
             {
-                if(!currentSchema.ActionButtons[action].buttonNames.Contains(button))
+                if (!currentSchema.ActionButtons[action].buttonNames.Contains(button))
                     currentSchema.ActionButtons[action].buttonNames.Add(button);
             }
             else

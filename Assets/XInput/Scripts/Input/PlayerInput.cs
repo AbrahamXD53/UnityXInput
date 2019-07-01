@@ -10,7 +10,7 @@ namespace XInput
     public class PlayerInput
     {
         public InputDevice inputDevice;
-        public PlayerIndex controlIndex;
+        public GamepadIndex controlIndex;
         public int realIndex = 0;
         public bool ready = false;
 
@@ -22,14 +22,14 @@ namespace XInput
             return this.inputDevice == inputDevice;
         }
 
-        public bool IsInput(InputDevice inputDevice, PlayerIndex playerIndex)
+        public bool IsInput(InputDevice inputDevice, GamepadIndex playerIndex)
         {
             return this.inputDevice == inputDevice && this.controlIndex == playerIndex;
         }
 
-        internal bool IsPlayer(InputDevice inputDevice, PlayerIndex playerIndex)
+        internal bool IsPlayer(InputDevice inputDevice, GamepadIndex playerIndex)
         {
-            return this.inputDevice == InputDevice.Gamepad || this.inputDevice == InputDevice.GenericGamepad ? IsInput(inputDevice, playerIndex) : IsInput(inputDevice);
+            return this.inputDevice == InputDevice.Gamepad ? IsInput(inputDevice, playerIndex) : IsInput(inputDevice);
         }
     }
 }

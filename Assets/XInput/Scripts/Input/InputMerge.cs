@@ -4,12 +4,14 @@ using UnityEngine;
 
 namespace XInput
 {
+    public enum GamepadIndex { One, Two, Three, Four, Any }
+
     public enum InputDevice
     {
         Any = 0,
         KeyboardMouse = 1,
         Gamepad = 2,
-        GenericGamepad = 4,
+        //GenericGamepad = 4,
         Touch = 8,
     }
 

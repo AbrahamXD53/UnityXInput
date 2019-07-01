@@ -36,14 +36,14 @@ namespace XInput
             DontDestroyOnLoad(gameObject);
         }
 
-        protected IEnumerator VibrateCorutine(PlayerIndex index, float intensity, float duration)
+        protected IEnumerator VibrateCorutine(GamepadIndex index, float intensity, float duration)
         {
-            GamePad.SetVibration(index, intensity, intensity);
+            GamePad.SetVibration((PlayerIndex)index, intensity, intensity);
             yield return new WaitForSeconds(duration);
-            GamePad.SetVibration(index, 0, 0);
+            GamePad.SetVibration((PlayerIndex)index, 0, 0);
         }
 
-        public void Vibrate(PlayerIndex playerIndex, float intensity = 1.0f, float duration = 0.1f)
+        public void Vibrate(GamepadIndex playerIndex, float intensity = 1.0f, float duration = 0.1f)
         {
             StartCoroutine(VibrateCorutine(playerIndex, intensity, duration));
         }
